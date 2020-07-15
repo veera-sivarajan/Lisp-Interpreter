@@ -51,7 +51,8 @@ def standardEnv() -> Env:
         'abs':     abs,
         'append':  op.add,  
         'apply':   lambda proc, args: proc(*args),
-        'begin':   lambda *x: x[1],
+        'atom?':   lambda x: not isinstance(x, List),
+        'begin':   lambda *x: x[-1],
         'car':     lambda x: x[0],
         'cdr':     lambda x: x[1:], 
         'cons':    lambda x,y: [x] + y, #x is an item and y is a list
@@ -91,12 +92,16 @@ class Procedure(object):
 globalEnv = standardEnv()
 
 def eval(x: Exp, env = globalEnv) -> Exp:
-  #print("Expression: " , x)
+  print("Expression: " , x)
   if isinstance(x, Symbol): #Check if built in function 
     #print("Symbol" , x)
     if x == 'exit':
       exit()
+    #print(env.locate(x))
     return env.locate(x)[x]
+
+  elif isinstance(x, Number):
+    return x
 
   elif not isinstance(x, List):
     return x
@@ -112,7 +117,7 @@ def eval(x: Exp, env = globalEnv) -> Exp:
     exp = (conseq if eval(test, env) else alt)
     return eval(exp, env)
 
-  elif x[0] == 'define': 
+  elif op == 'define': 
     #print("define statement")
     (symbol, exp) = args 
     env[symbol] = eval(exp, env) #Add variable name: value to env
@@ -127,8 +132,9 @@ def eval(x: Exp, env = globalEnv) -> Exp:
 
   else:
     #print("non built it procedure")
-    proc = eval(x[0], env) #store function name in proc
-    args = [eval(arg, env) for arg in x[1:]] #evaluate all arguments and store in args
-    return proc(*args)  #unpack elements from list to positional arguments
+    proc = eval(op, env) #store function name in proc
+    vals = [eval(arg, env) for arg in args] #evaluate all arguments and store in args
+    print(vals)
+    return proc(*vals)  #unpack elements from list to positional arguments
                         #func(*[1, 2, 3]) == func(1, 2, 3)
 
