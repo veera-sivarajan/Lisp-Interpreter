@@ -71,6 +71,7 @@ def standardEnv() -> Env:
         'procedure?': callable,
         'round':   round,
         'symbol?': lambda x: isinstance(x, Symbol),
+        't'    : True,
   })
   return env
 
@@ -130,6 +131,16 @@ def eval(x: Exp, env = globalEnv) -> Exp:
     (parms, body) = args
     return Procedure(parms, body, env)
 
+  elif op == "cond":
+    for (x,y) in args:
+      pred = x
+      stat = y
+      if eval(x, env):
+        return eval(y, env)
+    #if pred == "t":
+    #  return eval(y, env)
+    return []
+    
   else:
     #print("non built it procedure")
     proc = eval(op, env) #store function name in proc

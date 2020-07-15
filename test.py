@@ -8,8 +8,7 @@ string = ["quote" , "x", "10"]
 op, *args = string
 #print("op: ", op)
 #print("args: ", args)
-args = (1, 2, 3)
-x = lambda *args: print(args)
-x()
+lis = ["cond", [["predicate"], ["then do somehting 1"]], [["predicate2"], ["then do something 2"]]]
 
-
+op, *args = lis
+print(args[0])
