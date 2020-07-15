@@ -1,6 +1,6 @@
-from calc import *
+from lisp import *
 
-def repl(prompt = "lispCalc>>"):
+def repl(prompt = "lisp>>"):
   while True:
     val = eval(parse(input(prompt)))
     if val is not None:

@@ -72,6 +72,22 @@ def standardEnv() -> Env:
         'symbol?': lambda x: isinstance(x, Symbol),
   })
   return env
+
+class Env(dict):
+  def __init__(self, parms = (), args = (), outer = None):
+    self.update(zip(parms, args))
+    self.outer = outer
+
+  def locate(self, var):
+    return self if (var in self) else self.outer.locate(var)
+
+class Procedure(object):
+  def __init__(self, parms, body, env):
+    self.parms, self.body, self.env = parms, body, env
+
+  def __call__(self, *args):
+    return eval(self.body, Env(self.parms, args, self.env))
+
 globalEnv = standardEnv()
 
 def eval(x: Exp, env = globalEnv) -> Exp:
@@ -80,22 +96,34 @@ def eval(x: Exp, env = globalEnv) -> Exp:
     #print("Symbol" , x)
     if x == 'exit':
       exit()
-    return env[x]
+    return env.locate(x)[x]
 
-  elif isinstance(x, Number): #Check if number
-    #print("Number Instance")
+  elif not isinstance(x, List):
     return x
+  
+  op, *args = x
+  
+  if op == "quote":
+    return args[0]
 
-  elif x[0] == 'if': #Check if 
+  elif op == 'if': #Check if 
     #print("If condition")
-    (_, test, conseq, alt) = x
+    (test, conseq, alt) = args 
     exp = (conseq if eval(test, env) else alt)
     return eval(exp, env)
 
   elif x[0] == 'define': 
     #print("define statement")
-    (_, symbol, exp) = x
+    (symbol, exp) = args 
     env[symbol] = eval(exp, env) #Add variable name: value to env
+
+  elif op == "set":
+    (symbol, exp) = args
+    env.locate(symbol)[symbol] = eval(exp, env)
+
+  elif op == "lambda":
+    (parms, body) = args
+    return Procedure(parms, body, env)
 
   else:
     #print("non built it procedure")
