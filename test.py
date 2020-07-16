@@ -6,16 +6,14 @@ def schemeStr(exp):
   else:
     return str(exp)
 
-with open('lispcode') as file:
+with open('codefile') as file:
   for line in file:
-    print(type(line))
+    print("Line: ", line, "Line length: " , len(line))
     if(len(line) > 0):
       try:
-        val = eval(parse(line))
+        val = eval(parse(line.strip()))
         if val is not None:
           print(schemeStr(val))
       except KeyboardInterrupt:
         print("\n")
         exit()
-      
-

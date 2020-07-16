@@ -1,54 +1,16 @@
 import math
 import operator as op
+from var import *
+from parse import *
 
-Symbol = str
-Number = (int, float)
-Atom = (Symbol, Number)
-List = list
-Exp = (Atom, List)
-Env = dict
-
-def tokenize(line: str) -> list:
-  return line.replace('(', ' ( ').replace(')', ' ) ').split()
-
-def parse(program: str) -> Exp:
-  return readTokens(tokenize(program))
-  
-def readTokens(tokens: list) -> Exp:
-  if len(tokens) == 0:
-    raise SyntaxError('unexpected EOF')
-
-  token = tokens.pop(0) #popping first element to iterate list
-
-  if token == '(':
-    L = []
-    while tokens[0] != ')':
-      #print(hex(id(tokens)))
-      #print("Inside while: " ,  tokens)
-      L.append(readTokens(tokens))
-    tokens.pop(0)
-    return L
-    
-  elif token == ')':
-    raise SyntaxError('unexpected )')
-
-  else: 
-    return atom(token)
-
-def atom(token: str) -> Atom:
-  try: return int(token)
-  except ValueError:
-    try: return float(token)
-    except ValueError:
-      return Symbol(token)
-      
 def standardEnv() -> Env:
-  env = Env()
-  env.update(vars(math)) #Convert trig functions to dict and add to env
+  env = Env() #create new dict
+  env.update(vars(math)) #Convert trig functions to dict format and add to env
   env.update({
         '+':op.add, '-':op.sub, '*':op.mul, '/':op.truediv, 
         '>':op.gt, '<':op.lt, '>=':op.ge, '<=':op.le, '=':op.eq, 
         'abs':     abs,
+        'add':     lambda *x: sum(x),
         'append':  op.add,  
         'apply':   lambda proc, args: proc(*args),
         'atom?':   lambda x: not isinstance(x, List),
@@ -96,8 +58,6 @@ def eval(x: Exp, env = globalEnv) -> Exp:
   print("Expression: " , x)
   if isinstance(x, Symbol): #Check if built in function 
     #print("Symbol" , x)
-    if x == 'exit':
-      exit()
     #print(env.locate(x))
     return env.locate(x)[x]
 
@@ -133,8 +93,8 @@ def eval(x: Exp, env = globalEnv) -> Exp:
 
   elif op == "cond":
     for (x,y) in args:
-      pred = x
-      stat = y
+      #pred = x
+      #stat = y
       if eval(x, env):
         return eval(y, env)
     #if pred == "t":
@@ -145,7 +105,7 @@ def eval(x: Exp, env = globalEnv) -> Exp:
     #print("non built it procedure")
     proc = eval(op, env) #store function name in proc
     vals = [eval(arg, env) for arg in args] #evaluate all arguments and store in args
-    print(vals)
+    #print(vals)
     return proc(*vals)  #unpack elements from list to positional arguments
                         #func(*[1, 2, 3]) == func(1, 2, 3)
 
