@@ -7,10 +7,10 @@ def standardEnv() -> Env:
   env = Env() #create new dict
   env.update(vars(math)) #Convert trig functions to dict format and add to env
   env.update({
-        '+':op.add, '-':op.sub, '*':op.mul, '/':op.truediv, 
+        '+':lambda *x: sum(x), '-':op.sub, 'test':op.mul, '/':op.truediv, 
         '>':op.gt, '<':op.lt, '>=':op.ge, '<=':op.le, '=':op.eq, 
+        'mul':     lambda *x: math.prod(x),
         'abs':     abs,
-        'add':     lambda *x: sum(x),
         'append':  op.add,  
         'apply':   lambda proc, args: proc(*args),
         'atom?':   lambda x: not isinstance(x, List),
@@ -59,14 +59,16 @@ globalEnv = standardEnv()
 def eval(x: Exp, env = globalEnv) -> Exp:
   print("Expression: " , x)
   if isinstance(x, Symbol): #Check if built in function 
-    #print("Symbol" , x)
+    print("Symbol" , x)
     #print(env.locate(x))
     return env.locate(x)[x]
 
   elif isinstance(x, Number):
+    print("Number: ", x)
     return x
 
   elif not isinstance(x, List):
+    print("List: ", x)
     return x
   
   op, *args = x
@@ -75,13 +77,13 @@ def eval(x: Exp, env = globalEnv) -> Exp:
     return args[0]
 
   elif op == 'if': #Check if 
-    #print("If condition")
+    print("If condition")
     (test, conseq, alt) = args 
     exp = (conseq if eval(test, env) else alt)
     return eval(exp, env)
 
   elif op == 'define': 
-    #print("define statement")
+    print("define statement")
     (symbol, exp) = args 
     env[symbol] = eval(exp, env) #Add variable name: value to env
 
@@ -106,7 +108,7 @@ def eval(x: Exp, env = globalEnv) -> Exp:
     return []
     
   else:
-    #print("non built it procedure")
+    print("non built it procedure")
     proc = eval(op, env) #store function name in proc
     vals = [eval(arg, env) for arg in args] #evaluate all arguments and store in args
     #print(vals)

@@ -1,12 +1,10 @@
-class Test:
-  def __init__(self, a, b):
-    print("init")
-    self.a = a
-    self.b = b
+import math
 
-  def __call__(self, a, b):
-    print("__call__")
-    print("a+b", a+b)
+tup = (1, 2, 3)
 
-obj = Test(1, 2)
-Test(3, 4)
+func = 1
+func = lambda x: x * func
+map(func, tup)
+
+import sys
+print(sys.builtin_module_names)
