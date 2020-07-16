@@ -47,7 +47,9 @@ class Env(dict):
 
 class Procedure(object):
   def __init__(self, parms, body, env):
-    self.parms, self.body, self.env = parms, body, env
+    self.parms = parms
+    self.body = body
+    self.env = env
 
   def __call__(self, *args):
     return eval(self.body, Env(self.parms, args, self.env))
@@ -89,7 +91,9 @@ def eval(x: Exp, env = globalEnv) -> Exp:
 
   elif op == "lambda":
     (parms, body) = args
+    print("Calling Procedure")
     return Procedure(parms, body, env)
+    #return eval(body, Env(parms, 
 
   elif op == "cond":
     for (x,y) in args:

@@ -1,19 +1,12 @@
-from lisp import *
+class Test:
+  def __init__(self, a, b):
+    print("init")
+    self.a = a
+    self.b = b
 
-def schemeStr(exp):
-  if isinstance(exp, List):
-    return '(' + ' '.join(map(schemeStr, exp)) + ')'
-  else:
-    return str(exp)
+  def __call__(self, a, b):
+    print("__call__")
+    print("a+b", a+b)
 
-with open('codefile') as file:
-  for line in file:
-    print("Line: ", line, "Line length: " , len(line))
-    if(len(line) > 0):
-      try:
-        val = eval(parse(line.strip()))
-        if val is not None:
-          print(schemeStr(val))
-      except KeyboardInterrupt:
-        print("\n")
-        exit()
+obj = Test(1, 2)
+Test(3, 4)
