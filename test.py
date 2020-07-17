@@ -1,10 +1,3 @@
-import math
-
-tup = (1, 2, 3)
-
-func = 1
-func = lambda x: x * func
-map(func, tup)
-
-import sys
-print(sys.builtin_module_names)
+lis = ["Word 1", "Word 2", "Word 3"]
+lis.pop(1)
+print(lis)
