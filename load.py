@@ -10,26 +10,28 @@ def load(filename = 'codefile'):
   f = open(filename, 'r')
   program = f.readlines()
   f.close()
-  program = [line.strip() for line in program]
-  lenProgram = len(program)
+  track = []
   index = 0
-  #print("Length: ", lenProgram)
-  while (index < lenProgram):
-    #print("Incoming index: ", index)
-    while not (lparen(program[index]) == rparen(program[index])):
-      #print("Modding index at: ", index)
-      #print("Moding line: ", program[index])
-      #print(lparen(program[index]), " ", rparen(program[index]))
-      addIndex = index + 1
-      #print("Adding ele at: ",addIndex)
-      program[index] += " " + program[addIndex]
-      #print("Modifyed input: ",program[index])
-      program.pop(addIndex)
-      #print("Modifyed program: ",program)
+  pLen = len(program)
+  while (index < pLen):
+    line = program[index].strip()
+    while (lparen(line) != rparen(line)):
+      #print("Inside while loop")
+      index += 1
+      line += program[index] 
+      #print(line)
+    feed(line)
     index += 1
-    lenProgram = len(program)
-    #print(lenProgram)
-    for line in program:
-      print(line)
       
+def feed(line):
+  val = eval(parse(line))
+  if val is not None:
+    print(schemeStr(val))
+
+def schemeStr(exp):
+  if isinstance(exp, List):
+    return '(' + ' '.join(map(schemeStr, exp)) + ')'
+  else:
+    return str(exp)
+
 load()

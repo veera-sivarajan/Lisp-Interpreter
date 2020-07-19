@@ -7,7 +7,7 @@ def standardEnv() -> Env:
   env = Env() #create new dict
   env.update(vars(math)) #Convert trig functions to dict format and add to env
   env.update({
-        '+':lambda *x: sum(x), '-':op.sub, 'test':op.mul, '/':op.truediv, 
+        '+':lambda *x: sum(x), '-':op.sub, '*':op.mul, '/':op.truediv, 
         '>':op.gt, '<':op.lt, '>=':op.ge, '<=':op.le, '=':op.eq, 
         'mul':     lambda *x: math.prod(x),
         'abs':     abs,
