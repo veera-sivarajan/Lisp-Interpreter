@@ -1,12 +1,9 @@
 from lisp import *
 
-def lparen(line):
-  return line.count('(')
+def equalParen(line):
+  return line.count('(') == line.count(')')
 
-def rparen(line):
-  return line.count(')')
-
-def load(filename = 'codefile'):
+def load(filename = "/home/veera/Projects/LispIp/test/codefile"):
   f = open(filename, 'r')
   program = f.readlines()
   f.close()
@@ -14,7 +11,7 @@ def load(filename = 'codefile'):
   pLen = len(program)
   while (index < pLen):
     line = program[index].strip()
-    while (lparen(line) != rparen(line)):
+    while not (equalParen(line)):
       #print("Inside while loop")
       index += 1
       line += program[index] 

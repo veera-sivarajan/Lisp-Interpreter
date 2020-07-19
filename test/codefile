@@ -1,4 +1,4 @@
-(define twice (lambda (x) (* 2 x)))
-(define repeat (lambda (f) (lambda (x) (f (f x)))))
-(twice 5)
-((repeat (repeat twice)) 10)
+(define square (lambda (x)
+  (* x x)
+))
+(square 5)
