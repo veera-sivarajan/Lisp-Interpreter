@@ -29,7 +29,7 @@ def standardEnv() -> Env:
         'min':     min,
         'not':     op.not_,
         'null?':   lambda x: x == [], 
-        'number?': lambda x: isinstance(x, Number), 'print': print, 
+        'number?': lambda x: isinstance(x, Number), '#print': print, 
         'procedure?': callable,
         'round':   round,
         'symbol?': lambda x: isinstance(x, Symbol),
@@ -57,18 +57,18 @@ class Procedure(object):
 globalEnv = standardEnv()
 
 def eval(x: Exp, env = globalEnv) -> Exp:
-  print("Expression: " , x)
+  #print("Expression: " , x)
   if isinstance(x, Symbol): #Check if built in function 
-    print("Symbol" , x)
-    #print(env.locate(x))
+    #print("Symbol" , x)
+    ##print(env.locate(x))
     return env.locate(x)[x]
 
   elif isinstance(x, Number):
-    print("Number: ", x)
+    #print("Number: ", x)
     return x
 
   elif not isinstance(x, List):
-    print("List: ", x)
+    #print("List: ", x)
     return x
   
   op, *args = x
@@ -77,13 +77,13 @@ def eval(x: Exp, env = globalEnv) -> Exp:
     return args[0]
 
   elif op == 'if': #Check if 
-    print("If condition")
+    #print("If condition")
     (test, conseq, alt) = args 
     exp = (conseq if eval(test, env) else alt)
     return eval(exp, env)
 
   elif op == 'define': 
-    print("define statement")
+    #print("define statement")
     (symbol, exp) = args 
     env[symbol] = eval(exp, env) #Add variable name: value to env
 
@@ -93,7 +93,7 @@ def eval(x: Exp, env = globalEnv) -> Exp:
 
   elif op == "lambda":
     (parms, body) = args
-    print("Calling Procedure")
+    #print("Calling Procedure")
     return Procedure(parms, body, env)
     #return eval(body, Env(parms, 
 
@@ -104,10 +104,10 @@ def eval(x: Exp, env = globalEnv) -> Exp:
     return [] #WHY?
     
   else:
-    print("non built it procedure")
+    #print("non built it procedure")
     proc = eval(op, env) #get function definition from env
     vals = [eval(arg, env) for arg in args] #evaluate all arguments and store in args
-    #print(vals)
+    ##print(vals)
     return proc(*vals)  #unpack elements from list to positional arguments
                         #func(*[1, 2, 3]) == func(1, 2, 3)
 
