@@ -1,10 +1,20 @@
-def pow(x, y):
-  if not (y == 0):
-    return (x * pow(x, y - 1))
-  return 1
+class test(object):
+    def __init__(self, a, b):
+      print("Inside init")
+      self.a = a
+      self.b = b
 
-print(pow(2,3))
+    def __call__(self, *args):
+      print("Inside call")
+      return func(args)
 
-(define pow (lambda (x y) (cond ((not y 0) (* x (pow x (- y 1)))) (t (1))))) 
+def func(args):
+  print(args)
 
+def load():
+  return test(1, 2)
+
+x = load()
+x(1,2)
+  
 

@@ -1,8 +1,4 @@
-(define square (lambda (x y z) 
-  (cond
-    ((> x y) (quote (x g y)))
-    ((> x z) (quote (x g z)))
-    (t (quote (y z g x)))
-  )
-))
-(square 1 2 3)
+(define twice (lambda (x) (* 2 x)))
+(define repeat (lambda (f) (lambda (x) (f (f x)))))
+(twice 5)
+((repeat (repeat twice)) 10)

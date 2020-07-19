@@ -97,19 +97,15 @@ def eval(x: Exp, env = globalEnv) -> Exp:
     return Procedure(parms, body, env)
     #return eval(body, Env(parms, 
 
-  elif op == "cond":
+  elif op == "cond": #Lisp's version of if case
     for (x,y) in args:
-      #pred = x
-      #stat = y
       if eval(x, env):
         return eval(y, env)
-    #if pred == "t":
-    #  return eval(y, env)
-    return []
+    return [] #WHY?
     
   else:
     print("non built it procedure")
-    proc = eval(op, env) #store function name in proc
+    proc = eval(op, env) #get function definition from env
     vals = [eval(arg, env) for arg in args] #evaluate all arguments and store in args
     #print(vals)
     return proc(*vals)  #unpack elements from list to positional arguments

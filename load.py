@@ -10,7 +10,6 @@ def load(filename = 'codefile'):
   f = open(filename, 'r')
   program = f.readlines()
   f.close()
-  track = []
   index = 0
   pLen = len(program)
   while (index < pLen):
