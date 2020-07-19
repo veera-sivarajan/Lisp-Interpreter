@@ -1,4 +1,5 @@
 from lisp import *
+import sys
 
 def equalParen(line):
   return line.count('(') == line.count(')')
@@ -30,4 +31,4 @@ def schemeStr(exp):
   else:
     return str(exp)
 
-load()
+load(sys.argv[1])
